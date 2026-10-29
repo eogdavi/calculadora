@@ -1,1 +1,104 @@
+import java.util.InputMismatchException;
+import java.util.Scanner;
 
+public class Calculadora {
+
+    static Scanner scanner = new Scanner(System.in);
+
+    public static void main(String[] args) {
+        int opcao;
+
+        do {
+            exibirMenu();
+            opcao = lerOpcao();
+
+            if (opcao >= 1 && opcao <= 7) {
+                executarOperacao(opcao);
+            } else if (opcao != 0) {
+                System.out.println("Opção inválida! Tente novamente.");
+            }
+        } while (opcao != 0);
+
+        System.out.println("Calculadora encerrada. Até logo!");
+        scanner.close();
+    }
+
+    static void exibirMenu() {
+        System.out.println("\n===== CALCULADORA =====");
+        System.out.println("1 - Soma");
+        System.out.println("2 - Subtração");
+        System.out.println("3 - Multiplicação");
+        System.out.println("4 - Divisão");
+        System.out.println("5 - Potência");
+        System.out.println("6 - Raiz quadrada");
+        System.out.println("7 - Resto da divisão (módulo)");
+        System.out.println("0 - Sair");
+        System.out.print("Escolha uma opção: ");
+    }
+
+    static int lerOpcao() {
+        try {
+            return scanner.nextInt();
+        } catch (InputMismatchException e) {
+            scanner.next(); // descarta a entrada inválida
+            return -1;
+        }
+    }
+
+    static double lerNumero(String mensagem) {
+        while (true) {
+            System.out.print(mensagem);
+            try {
+                return scanner.nextDouble();
+            } catch (InputMismatchException e) {
+                scanner.next();
+                System.out.println("Valor inválido! Digite um número (use vírgula para decimais).");
+            }
+        }
+    }
+
+    static void executarOperacao(int opcao) {
+        double a = lerNumero("Digite o primeiro número: ");
+
+        // A raiz quadrada usa apenas um número
+        if (opcao == 6) {
+            if (a < 0) {
+                System.out.println("Erro: não existe raiz quadrada real de número negativo.");
+            } else {
+                System.out.println("Resultado: " + Math.sqrt(a));
+            }
+            return;
+        }
+
+        double b = lerNumero("Digite o segundo número: ");
+
+        switch (opcao) {
+            case 1:
+                System.out.println("Resultado: " + (a + b));
+                break;
+            case 2:
+                System.out.println("Resultado: " + (a - b));
+                break;
+            case 3:
+                System.out.println("Resultado: " + (a * b));
+                break;
+            case 4:
+                if (b == 0) {
+                    System.out.println("Erro: divisão por zero não é permitida.");
+                } else {
+                    System.out.println("Resultado: " + (a / b));
+                }
+                break;
+            case 5:
+                System.out.println("Resultado: " + Math.pow(a, b));
+                break;
+            case 7:
+                if (b == 0) {
+                    System.out.println("Erro: divisão por zero não é permitida.");
+                } else {
+                    System.out.println("Resultado: " + (a % b));
+                }
+                break;
+        }
+    }
+}
